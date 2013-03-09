@@ -1,0 +1,5 @@
+*.iso
+*.box
+.vagrant
+*.pem
+.chef/syntax_check_cache/*
