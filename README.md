@@ -74,6 +74,60 @@ Most recipes are installed from git using the knife-github-cookbook gem. Usage i
 
 Basic usage is ```knife cookbook github install gituser/repo```, eg to install the opscode apt cookbook, ```knife cookbook github install opscode-cookbooks/apt```
 
+Spinning up new Vagrant local instances
+---------------------------------------
+
+### Basebox Definitions
+
+Create your basebox definition. 
+
+Remember - your basebox should be bare bones to get up and running.
+
+1. Run ```vagrant basebox templates``` to view all templates
+1. Run ```vagrant basebox define 'BaseServer' 'ubuntu-12.04.1-server-amd64'``` to create your definition
+
+Your basebox defintions will be created in ```defintions/BaseServer```
+
+You may need to edit the ```defintions/BaseServer/postinstall.sh``` file to customize it a bit.
+For instance, with this ubuntu definition, packages for libxml and readline need added or 
+ruby should be pulled from a package instead of being build from source.
+
+After reviewing and verifying your definition files, make sure to commit them.
+
+### Creating a basebox
+
+1. Run ```vagrant basebox build BaseServer```
+
+Vagrant should download your initial iso file, launch a VirtualBox VM and set it up. 
+
+After the basebox is build, the VM should stay in the window. 
+
+1. Verify your basebox by running ```vagrant basebox validate BaseServer```
+1. Export your box ```vagrant basebox export BaseServer```
+1. Move the box to the ```boxes/``` folder - Run ```mv BaseBox.box ./boxes/```
+
+These baseboxes are large and typically should not be checked in. You can upload these boxes to 
+s3 or other network storage for future use.
+
+### Create Instances with Vagrant
+
+After you have created a basebox, you can move forward with setting up vagrant instances.
+
+1. Run ```mkdir instances/cluster && cd instances/cluster```
+1. Run ```vagrant init TestServer  ../../boxes/BaseServer.box```
+
+This will create a Vagrantfile which is used to define your server(s) managed by this
+vagrant definition. Open the file and have a look around
+
+Run ```vagrant up``` to initially spin up your vagrant instance.
+
+After your server has come up, you can run ```vagrant ssh``` to access your server and have a
+look around
+
+### Setting Up Your Vagrant Config
+
+WIP
+
 
 
 [virtualbox]: https://www.virtualbox.org/ "VirtualBox"
